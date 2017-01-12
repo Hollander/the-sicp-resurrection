@@ -20,10 +20,10 @@ import { makeWire, probe, halfAdder, setSignal, Digital, propagate, makeAgenda }
 
     function primes():Stream<number> {
         function next(s:Stream<number>):Stream<number> {
-            let head = streamHead(s);
+            let current = streamHead(s);
 
-            return stream(head, ()=> {
-                return next(streamFilter(streamRest(s), (x)=>x % head != 0));
+            return stream(current, ()=> {
+                return next(streamFilter(streamRest(s), (candidate)=>candidate % current != 0));
             });
         }
 
