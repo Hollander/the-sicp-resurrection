@@ -1,13 +1,13 @@
 export interface Delayed<T> {
-    ():Stream<T>;
+    ():T;
 }
 
 export interface Stream<T> {
     head:T,
-    rest:Delayed<T>
+    rest:Delayed<Stream<T>>
 }
 
-function delay<T>(b:Delayed<T>):Delayed<T> {
+function delay<T>(b:Delayed<Stream<T>>):Delayed<Stream<T>> {
     let result:{value:Stream<T>} = null;
 
     return () => {
@@ -18,11 +18,11 @@ function delay<T>(b:Delayed<T>):Delayed<T> {
     };
 }
 
-function force<T>(delayed:Delayed<T>):Stream<T> {
+function force<T>(delayed:Delayed<Stream<T>>):Stream<T> {
     return delayed();
 }
 
-export function stream<T>(a:T, b:Delayed<T>):Stream<T> {
+export function stream<T>(a:T, b:Delayed<Stream<T>>):Stream<T> {
     return {
         head: a,
         rest:delay(b)
